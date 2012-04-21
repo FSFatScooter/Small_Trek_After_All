@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<title>templates</title>
+		<meta name="description" content="" />
+		<meta name="author" content="BROCK ALLEN" />
+		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
+		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+		<link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<script src="keys.js"></script>
+		<script src="entities.js"></script>
+		<script>
+			var ctx;
+			var angle = 0;
+			var sc = 1;
+			var images = [];
+			var entities = [];
+			var unix;
+			var uniy;
+			var sp = {
+				//			IMAGENAME: null
+			};
+
+			function init() {
+				ctx = document.getElementById('can').getContext('2d');
+				/*for(var n in sp) { // Image resource loader
+				 sp[n] = new Image();
+				 sp[n].src = n + ".png";
+				 }
+				 */
+				ctx.fillStyle = "#000";
+				entities.push(Player({}));
+				/*var count = 10; // Star Map Generator
+				 var t = 0;
+				 while(t < count) {
+				 entities.push(Star({}));
+				 t++;
+				 }
+				 */
+				loop();
+			}
+
+			function rand(a, b) {
+				a = a || null;
+				b = b || null;
+				if(a == null && b == null) {
+					return Math.random();
+				} else if(a != null && b == null) {
+					return Math.random() * a;
+				} else if(a != null && b != null) {
+					return Math.random() * dif(a, b) + a;
+				}
+			}
+
+			function floor(a) {
+				return Math.floor(a);
+			}
+
+			function dif(a, b) {
+				return Math.abs(a - b);
+			}1
+
+			function deg(a) {
+				return a * 180 / Math.PI;
+			}
+
+			function rad(a) {
+				return a * Math.PI / 180;
+			}
+
+			function redang(a) {
+				while(a >= 360) {
+					a -= 360;
+				}
+				while(a < 0) {
+					a += 360;
+				}
+				return a;
+			}
+
+			function rect(x, y, w, h) {
+				w = w || 1;
+				h = h || 1;
+				ctx.fillRect(x, y, w, h);
+			}
+
+			function PAINT(g, tx, ty, r, sx, sy, xo, yo, b) {
+				sx = sx || 1;
+				sy = sy || 1;
+				b = (b == undefined) ? 1 : 0;
+				tx = tx || 0;
+				ty = ty || 0;
+				r = r || 0;
+				ctx.translate(tx + unix * b, ty + uniy * b);
+				ctx.rotate(rad(r));
+				ctx.scale(sc * sx, sc * sy);
+				if( typeof g === "object") {
+					xo = xo || -g.width / 2;
+					yo = yo || -g.height / 2;
+					ctx.drawImage(g, xo, yo);
+				} else if( typeof g === "function") {
+					xo = xo || 0;
+					yo = yo || 0;
+					ctx.translate(xo, yo);
+					g();
+					ctx.translate(-xo, -yo);
+				}
+				ctx.scale(1 / (sc * sx), 1 / (sc * sy));
+				ctx.rotate(-rad(r));
+				ctx.translate(-tx - unix * b, -ty - uniy * b);
+			}
+
+			function update() {
+				entities.forEach(function(entity) {
+					entity.update();
+				});
+				entities = entities.filter(function(entity) {
+					return entity.active;
+				});
+			}
+
+			function draw() {
+				entities.sort(function(a, b) {
+					return a.z - b.z;
+				})
+				entities.forEach(function(entity) {
+					entity.draw();
+				});
+			}
+
+			function loop() {
+				ctx.clearRect(0, 0, 600, 600);
+				ctx.fillStyle = "#000";
+				ctx.fillRect(0, 0, 600, 600);
+				draw();
+				PAINT(function() {
+					ctx.fillStyle = "#FFF";
+					ctx.fillRect(-1, -25, 2, 50);
+					ctx.fillRect(-25, -1, 50, 2);
+				})
+				angle += (angle == 359) ? -359 : 1;
+				update();
+				setTimeout('loop();', 12);
+			}
+		</script>
+	</head>
+	<body onload="init();">
+		<canvas id="can" width="600" height="600"></canvas>
+	</body>
+</html>
