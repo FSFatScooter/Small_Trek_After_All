@@ -110,6 +110,9 @@ function Smoke(S) {
 function Object(O){
 	O = O || {};
 	
-	
+	function method(){
+		
+	}
+		
 	return O;
 }
