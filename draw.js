@@ -1,6 +1,6 @@
-function drawEnterprise(){
-	ctx.fillStyle = "77F";
+function drawEnterprise(){	
 	paint(function(){
+		ctx.fillStyle = "77F";
 		rect(2,0,3);
 		rect(1,1);
 		rect(5,1);
@@ -20,5 +20,22 @@ function drawEnterprise(){
 		rect(1,9);
 		rect(5,9);
 		rect(3,11);
-	},200,200,angle,3,3,-3.5,-6);
+	},200,200,angle,1,1,-3.5,-6);
+}
+
+function drawSI(){
+	paint(function(){
+			ctx.fillStyle = "#6BF364";
+				rect(4,0,1,3);
+				rect(3,2,1,4);
+				rect(5,2,1,4);
+				rect(1,3,1,3);
+				rect(7,3,1,3);
+				rect(2,4);
+				rect(6,4);
+				rect(0,5);
+				rect(8,5);
+				rect(2,6);
+				rect(4,6);
+				rect(6,6);}, 200, 200, angle,1,1,-4.5,-4);
 }
