@@ -1,13 +1,15 @@
 function Player(P) {P == P || {};
 	P.x = 0;
 	P.y = 0;
-	P.scale = 1;
+	P.scale = 2;
 	P.angle = 0;
 	P.anglea = 0;
 	P.xvel = 0;
 	P.yvel = 0;
 	P.active = true;
 	P.age = 0;
+	P.fire = "";
+	P.weapon = "torpedo";
 	P.oldx = 0;
 	P.oldy = 0;
 	P.velmax = 10;
@@ -68,6 +70,11 @@ function Player(P) {P == P || {};
 		P.yvel = (Math.abs(P.yvel)<.01)? 0: (P.velt>P.velmax)? -(P.velmax)*Math.cos(rad(P.angle)): P.yvel;
 		P.x+=P.scale/3*P.xvel;
 		P.y+=P.scale/3*P.yvel;
+		if (key['space'][1] == 1){
+			if((P.fire == 0 || P.fire%10 == 0) && P.weapon === "torpedo"){entities.push(Torpedo({x:P.x,y:P.y,angle:P.angle+rand(-5,5),vel:P.velmax}));}
+			P.fire++;
+		}
+		else{P.fire=0};
 		//console.log(P.velt);
 		//console.log(Math.sqrt(Math.pow(dif(P.x,P.oldx),2) + Math.pow(dif(P.y,P.oldy),2)));
 		P.oldx = P.x;
@@ -81,6 +88,43 @@ function Player(P) {P == P || {};
 	};
 	
 	return P;
+}
+
+function Torpedo(T){
+	T = T || {};
+	T.active = true;
+	T.age = 0;
+	T.tail = 0;
+	T.x;
+	T.y;
+	T.angle = T.angle || 0;
+	T.vel = T.vel || 1;
+	T.power = 1;
+	T.type = "weapon";
+	T.z = 2;
+	
+	T.update = function(){
+		T.age++;
+		T.x += T.vel*sin(T.angle);
+		T.y -= T.vel*cos(T.angle);
+		T.tail = (T.age < 10)? T.age*4: 40;
+		T.active = (T.age < 800)? true:false;	
+	}
+	
+	T.draw = function(){
+		paint(function(){
+			fill("#F00");
+			rect(-1,-1,2,2);
+			fill(redtail[(T.tail/2)]);
+			rect(-1,1,2,T.tail);
+		},T.x,T.y,T.angle);
+	}
+	
+	T.collide = function(){
+		
+	}
+		
+	return T;
 }
 
 function Smoke(S) {
@@ -108,7 +152,7 @@ function Smoke(S) {
 //		S.x += S.velx;
 //		S.y += S.vely;
 		S.age++;
-		S.r*=.9;
+		S.r*=.8;
 		S.decay -= (S.age > 5)? .1: 0;
 		//S.decay *= (S.age > 5)? .2: 1;
 		S.angle += 3*S.angadd;
@@ -121,7 +165,7 @@ function Smoke(S) {
 function Object(O){
 	O = O || {};
 	
-	function method(){
+	O.method = function(){
 		
 	}
 		
