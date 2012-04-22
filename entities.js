@@ -16,6 +16,7 @@ function Player(P) {P == P || {};
 	P.velt = 0;
 	P.z = 3;
 	P.type = "player";
+	P.physics = "neutral";
 	P.phys = true;
 
 	P.draw = function() {
@@ -71,7 +72,7 @@ function Player(P) {P == P || {};
 		P.x+=P.scale/3*P.xvel;
 		P.y+=P.scale/3*P.yvel;
 		if (key['space'][1] == 1){
-			if((P.fire == 0 || P.fire%10 == 0) && P.weapon === "torpedo"){entities.push(Torpedo({x:P.x,y:P.y,angle:P.angle+rand(-5,5),vel:P.velmax}));}
+			if((P.fire == 0 || P.fire%15 == 0) && P.weapon === "torpedo"){entities.push(Torpedo({x:P.x,y:P.y,angle:P.angle+rand(-2,2),vel:P.velmax}));}
 			P.fire++;
 		}
 		else{P.fire=0};
@@ -101,6 +102,7 @@ function Torpedo(T){
 	T.vel = T.vel || 1;
 	T.power = 1;
 	T.type = "weapon";
+	T.collisionType = "offense";
 	T.z = 2;
 	
 	T.update = function(){
@@ -138,7 +140,7 @@ function Smoke(S) {
 	S.angadd = (2*Math.round(rand())-1)*rand(5);;
 	S.velx = S.velx || 0;
 	S.vely = S.vely || 0;
-	S.phys = false;
+	S.collisionType = "none";
 	S.type = "vfx";
 
 	S.draw = function() {
@@ -167,6 +169,17 @@ function Object(O){
 	
 	O.method = function(){
 		
+	}
+	
+	O.collide = function(Type, damage, force, angle){
+		if(collsiontype == "offen"){
+			O.hp -= damage;
+			O.xvel += force*cos(angle);
+			O.yvel -= force*sin(angle);
+		}
+		else if(collisionType == "offensive"){
+			
+		}
 	}
 		
 	return O;

@@ -17,6 +17,8 @@
 		<script src="draw.js"></script>
 		<script>
 			var ctx;
+			var ctxwidth;
+			var ctxheight;
 			var angle = 0;
 			var sc = 1;
 			var images = [];
@@ -79,7 +81,11 @@
 
 			function dif(a, b) {
 				return Math.abs(a - b);
-			}1
+			}
+			
+			function dist(a,b,x,y){
+				return Math.sqrt(Math.pow(dif(a,x),2) + Math.pow(dif(b,y),2));
+			}
 
 			function deg(a) {
 				return a * 180 / Math.PI;
@@ -139,6 +145,21 @@
 				entities.forEach(function(entity) {
 					entity.update();
 				});
+				entities.forEach(function(entity){
+					var list = entities.filter(function(target){
+						return target.collisionType != "none";
+					});
+					list.forEach(function(colbox1){
+						list.forEach(function(colbox2){
+							if (colbox1 != colbox2){
+								var distance = dist(colbox1.x,colbox1.y,colbox2.x,colbox2.y);
+								if (distance < dif(colbox1.radius,colbox2.radius)){
+									colbox.collide(colbox2.collision);
+								}
+							}
+						});
+					});
+				});
 				entities = entities.filter(function(entity) {
 					return entity.active;
 				});
@@ -148,6 +169,9 @@
 				entities.sort(function(a, b) {
 					return a.z - b.z;
 				})
+				entities.forEach(function(entity) {
+					entity.draw();
+				});
 				entities.forEach(function(entity) {
 					entity.draw();
 				});
