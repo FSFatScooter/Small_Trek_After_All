@@ -16,7 +16,7 @@ function Player(P) {P == P || {};
 	P.phys = true;
 
 	P.draw = function() {
-		PAINT(function(){
+		paint(function(){
 			ctx.fillStyle = "#6BF364";
 				rect(4,0,1,3);
 				rect(3,2,1,4);
@@ -87,7 +87,7 @@ function Smoke(S) {
 	S.type = "vfx";
 
 	S.draw = function() {
-		PAINT(function(){
+		paint(function(){
 		//ctx.fillStyle = "rgba("+Math.floor(125*S.decay)+", " +Math.floor(255*S.decay)+", "+Math.floor(255*S.decay)+", "+ 1 +")";
 		ctx.fillStyle = "rgba(125, 255, 255, "+ (.001 + S.decay) +")";
 		rect(-S.r/2,-S.r/2,S.r,S.r);},S.x,S.y,S.angle,0,0);
