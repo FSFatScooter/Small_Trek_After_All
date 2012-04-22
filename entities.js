@@ -1,6 +1,7 @@
 function Player(P) {P == P || {};
 	P.x = 0;
 	P.y = 0;
+	P.scale = 1;
 	P.angle = 0;
 	P.anglea = 0;
 	P.xvel = 0;
@@ -17,19 +18,27 @@ function Player(P) {P == P || {};
 
 	P.draw = function() {
 		paint(function(){
-			ctx.fillStyle = "#6BF364";
-				rect(4,0,1,3);
-				rect(3,2,1,4);
-				rect(5,2,1,4);
-				rect(1,3,1,3);
-				rect(7,3,1,3);
-				rect(2,4);
-				rect(6,4);
-				rect(0,5);
-				rect(8,5);
-				rect(2,6);
-				rect(4,6);
-				rect(6,6);}, 300, 300, P.angle,3,3,-4.5,-4,0);
+		ctx.fillStyle = "77F";
+		rect(2,0,3);
+		rect(1,1);
+		rect(5,1);
+		rect(0,2,1,3);
+		rect(3,2,1,3);
+		rect(6,2,1,3);
+		rect(2,3);
+		rect(4,3);
+		rect(1,5);
+		rect(5,5);
+		rect(2,6,3);
+		rect(3,7);
+		rect(0,8,1,3);
+		rect(2,8,1,3);
+		rect(4,8,1,3);
+		rect(6,8,1,3);
+		rect(1,9);
+		rect(5,9);
+		rect(3,11);
+	}, 300, 300, P.angle,P.scale,P.scale,-3.5,-6,0);
 	};
 
 	P.update = function() {
@@ -48,7 +57,8 @@ function Player(P) {P == P || {};
 			P.xvel += .45*Math.sin(rad(P.angle));
 			P.yvel += -.45*Math.cos(rad(P.angle));
 			P.velt = Math.sqrt(Math.pow(P.xvel,2)+Math.pow(P.yvel,2));
-			entities.push(Smoke({x:P.x-24*(Math.cos(rad(P.angle-90))),y:P.y+18*Math.sin(rad(P.angle+90)),velx:-(Math.cos(rad(P.angle-90)))*rand(.5,1.5),vely:Math.sin(rad(P.angle+90))*(Math.random()+.5),r: P.velt/P.velmax*7*(2+.75*Math.sin(rad(24*P.age))),z:2+P.age*.0001}));
+			entities.push(Smoke({x:P.x-P.scale*3.5*(Math.cos(rad(P.angle-60))),y:P.y+P.scale*6*Math.sin(rad(P.angle+120)),velx:-P.scale*.1*(Math.cos(rad(P.angle-90)))*rand(.1,.2),vely:P.scale*.1*Math.sin(rad(P.angle+90))*rand(.1,.2),r: P.scale*P.velt/P.velmax*2*(2+.75*Math.sin(rad(24*P.age))),z:2+P.age*.0001}));
+			entities.push(Smoke({x:P.x-P.scale*3.5*(Math.cos(rad(P.angle-120))),y:P.y+P.scale*6*Math.sin(rad(P.angle+60)),velx:-P.scale*.1*(Math.cos(rad(P.angle-90)))*rand(.1,.2),vely:P.scale*.1*Math.sin(rad(P.angle+90))*rand(.1,.2),r: P.scale*P.velt/P.velmax*2*(2+.75*Math.sin(rad(24*P.age))),z:2+P.age*.0001}));
 			P.age++;
 		}
 		else{P.age=0};
@@ -56,8 +66,8 @@ function Player(P) {P == P || {};
 		P.yvel *= .95;
 		P.xvel = (Math.abs(P.xvel)<.01)? 0: (P.velt>P.velmax)? P.velmax*Math.sin(rad(P.angle)):P.xvel;
 		P.yvel = (Math.abs(P.yvel)<.01)? 0: (P.velt>P.velmax)? -(P.velmax)*Math.cos(rad(P.angle)): P.yvel;
-		P.x+=P.xvel;
-		P.y+=P.yvel;
+		P.x+=P.scale/3*P.xvel;
+		P.y+=P.scale/3*P.yvel;
 		//console.log(P.velt);
 		//console.log(Math.sqrt(Math.pow(dif(P.x,P.oldx),2) + Math.pow(dif(P.y,P.oldy),2)));
 		P.oldx = P.x;
@@ -81,6 +91,7 @@ function Smoke(S) {
 	S.decay = .999;
 	S.z = S.z || 2;
 	S.angle = floor(rand(360));
+	S.angadd = (2*Math.round(rand())-1)*rand(5);;
 	S.velx = S.velx || 0;
 	S.vely = S.vely || 0;
 	S.phys = false;
@@ -90,17 +101,17 @@ function Smoke(S) {
 		paint(function(){
 		//ctx.fillStyle = "rgba("+Math.floor(125*S.decay)+", " +Math.floor(255*S.decay)+", "+Math.floor(255*S.decay)+", "+ 1 +")";
 		ctx.fillStyle = "rgba(125, 255, 255, "+ (.001 + S.decay) +")";
-		rect(-S.r/2,-S.r/2,S.r,S.r);},S.x,S.y,S.angle,0,0);
+		rect(-S.r/2,-S.r/2,S.r,S.r);},S.x,S.y,S.angle*3,0,0);
 	};
 
 	S.update = function() {
-		S.x += S.velx;
-		S.y += S.vely;
+//		S.x += S.velx;
+//		S.y += S.vely;
 		S.age++;
 		S.r*=.9;
 		S.decay -= (S.age > 5)? .1: 0;
 		//S.decay *= (S.age > 5)? .2: 1;
-		S.angle += S.r*3;
+		S.angle += 3*S.angadd;
 		S.active = (S.r<.001 || S.decay < .001)?false: true;
 	};
 	
