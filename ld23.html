@@ -36,6 +36,7 @@
 				 */
 				ctx.fillStyle = "#000";
 				entities.push(Player({}));
+				drawinit();
 				/*var count = 10; // Star Map Generator
 				 var t = 0;
 				 while(t < count) {
@@ -56,6 +57,20 @@
 				} else if(a != null && b != null) {
 					return Math.random() * dif(a, b) + a;
 				}
+			}
+			
+			function cos(a,r){
+				if (r == undefined){
+					return Math.cos(rad(a));
+				}
+				else return Math.cos(a);
+			}
+			
+			function sin(a,r){
+				if (r == undefined){
+					return Math.sin(rad(a));
+				}
+				else Math.sin(a);
 			}
 
 			function floor(a) {
@@ -88,6 +103,10 @@
 				w = w || 1;
 				h = h || 1;
 				ctx.fillRect(x, y, w, h);
+			}
+			
+			function fill(c){
+				ctx.fillStyle = c;
 			}
 
 			function paint(g, tx, ty, r, sx, sy, xo, yo, b) {
